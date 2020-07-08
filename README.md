@@ -13,3 +13,6 @@
 
 **Database**
 * You can setup a local instance of a MySQL database or install docker engine - [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop) and run > `docker-compose up` in the terminal within the project directory (for now the app service is commeted out - when finished the entire project stack will be run like this)
+
+**Swagger**
+- See api documentation at: http://localhost:8080/swagger-ui.html

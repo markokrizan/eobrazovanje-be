@@ -29,6 +29,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_WHITELIST = {
+        "/swagger-resources/**",
+        "/swagger-ui.html",
+        "/v2/api-docs",
+        "/webjars/**",
+        "/api/auth/**",
+        "/api/user/checkUsernameAvailability"
+    };
+
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
@@ -82,9 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers("/api/auth/**")
-                        .permitAll()
-                    .antMatchers("/api/user/checkUsernameAvailability")
+                    .antMatchers(AUTH_WHITELIST)
                         .permitAll()
                     .antMatchers(HttpMethod.GET, "/api/education/**", "/api/users/**")
                         .permitAll()
