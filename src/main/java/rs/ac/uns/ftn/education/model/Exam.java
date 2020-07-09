@@ -18,6 +18,8 @@ import lombok.AccessLevel;
 @Table(name = "exams")
 @Getter @Setter @NoArgsConstructor @SuppressWarnings("unused")
 public class Exam {
+
+    private final int MAX_POINTS = 100;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +38,7 @@ public class Exam {
     public void setPoints(Long points) {
         Long currentPoints = course.getTotalExamPoints();
 
-        if(points >= currentPoints) {
+        if(points >= MAX_POINTS - currentPoints) {
             throw new AppException("Current exam total: " + currentPoints.toString() + " points");
         }
 
