@@ -20,7 +20,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/users/me")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("isAuthenticated()")
     public User getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         return userRepository.findById(currentUser.getId()).orElse(null);
     }
