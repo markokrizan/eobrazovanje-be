@@ -3,11 +3,17 @@ package rs.ac.uns.ftn.education.model;
 import rs.ac.uns.ftn.education.model.audit.DateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -15,7 +21,9 @@ import java.util.Set;
             "username"
         })
 })
+@Getter @Setter
 public class User extends DateAudit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +39,16 @@ public class User extends DateAudit {
     @NotBlank
     @Size(max = 15)
     private String username;        
+
+    @NotBlank
+    @Email
+    private String email;
+
+    @Nullable
+    private String phoneNumber;
+
+    @NotBlank
+    private String personalIdNumber;
 
     @NotBlank
     @Size(max = 100)
@@ -52,53 +70,5 @@ public class User extends DateAudit {
         this.lastName = lastName;
         this.username = username;
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 }

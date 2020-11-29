@@ -12,21 +12,22 @@ import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.uns.ftn.education.model.audit.DateAudit;
 
 @Entity
 @Table(name = "students", uniqueConstraints = {
     @UniqueConstraint(columnNames = {
-        "studentId"
+        "schoolIdNumber"
     })
 })
-@Getter @Setter @NoArgsConstructor @SuppressWarnings("unused")
-public class Student {
-    
+@Getter @Setter @NoArgsConstructor
+public class Student extends DateAudit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String studentId;
+    private String schoolIdNumber;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

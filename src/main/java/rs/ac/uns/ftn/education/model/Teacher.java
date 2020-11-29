@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import rs.ac.uns.ftn.education.model.audit.DateAudit;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "teachers")
-@Getter @Setter @NoArgsConstructor @SuppressWarnings("unused")
-public class Teacher {
+@Getter @Setter @NoArgsConstructor
+public class Teacher extends DateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

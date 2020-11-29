@@ -27,10 +27,19 @@ services:
   #   networks: 
   #    - backend
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: 'mailhog'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - backend
+
   db:
     image: mysql:latest
     ports:
-      - "3306:3306"
+      - "3308:3306"
     restart: always
     environment:
       MYSQL_DATABASE: education-app
