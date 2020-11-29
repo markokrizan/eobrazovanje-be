@@ -25,6 +25,8 @@ import rs.ac.uns.ftn.education.model.audit.DateAudit;
 @Getter @Setter @NoArgsConstructor
 public class Student extends DateAudit {
 
+    public static final int DEFAULT_PER_PAGE = 10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
