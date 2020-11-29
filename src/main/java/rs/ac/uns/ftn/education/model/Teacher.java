@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import rs.ac.uns.ftn.education.model.audit.DateAudit;
 
 import lombok.Getter;
@@ -24,6 +27,7 @@ public class Teacher extends DateAudit {
 
     private AcademicTitle academicTitle;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
