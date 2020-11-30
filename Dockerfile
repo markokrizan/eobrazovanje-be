@@ -1,5 +1,5 @@
 #### Stage 1: Build the application
-FROM openjdk:8-jdk-alpine as build
+FROM openjdk:11-jdk-slim as build
 
 #Set current work dir to root in order to create media dir
 WORKDIR /
@@ -28,7 +28,7 @@ RUN ./mvnw package -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 #### Stage 2: A minimal docker image with command to run the app 
-FROM openjdk:8-jre-alpine
+FROM openjdk:11-jre-slim
 
 ARG DEPENDENCY=/app/target/dependency
 

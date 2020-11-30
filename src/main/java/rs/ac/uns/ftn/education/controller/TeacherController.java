@@ -35,13 +35,13 @@ public class TeacherController {
   @Autowired
   RoleRepository roleRepository;
   
-  @GetMapping("/students")
+  @GetMapping("/teachers")
   @PreAuthorize("hasRole('ADMIN')")
   public Page<Teacher> getAll(@PageableDefault(size = 10) Pageable pageable) {
       return teacherRepository.findAll(pageable);
   }
 
-  @GetMapping("/students/{teacherId}")
+  @GetMapping("/teachers/{teacherId}")
   @PreAuthorize("hasRole('ADMIN')")
   public Teacher getOne(@PathVariable("teacherId") Long studentId) {    
       return teacherRepository.findById(studentId)
