@@ -36,7 +36,7 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
+    UserRepository<User> userRepository;
 
     @Autowired
     RoleRepository roleRepository;

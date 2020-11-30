@@ -21,6 +21,7 @@ import lombok.Setter;
             "username"
         })
 })
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter
 public class User extends DateAudit {
 
