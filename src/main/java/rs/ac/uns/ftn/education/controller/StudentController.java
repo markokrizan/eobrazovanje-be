@@ -62,7 +62,7 @@ public class StudentController {
   }
 
   @DeleteMapping("/students/{studentId}")
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasRole('ADMIN')")
   public void delete(@PathVariable("studentId") Long studentId) {
     studentRepository.deleteById(studentId);
   }

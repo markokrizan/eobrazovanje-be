@@ -45,7 +45,7 @@ public class TeacherController {
   @PreAuthorize("hasRole('ADMIN')")
   public Teacher getOne(@PathVariable("teacherId") Long studentId) {    
       return teacherRepository.findById(studentId)
-        .orElseThrow(() -> new ResourceNotFoundException("Student", "id", studentId));
+        .orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", studentId));
   }
 
   @PostMapping("/teachers")
@@ -62,7 +62,7 @@ public class TeacherController {
   }
 
   @DeleteMapping("/teachers/{teacherId}")
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasRole('ADMIN')")
   public void delete(@PathVariable("teacherId") Long teacherId) {
     teacherRepository.deleteById(teacherId);
   }
