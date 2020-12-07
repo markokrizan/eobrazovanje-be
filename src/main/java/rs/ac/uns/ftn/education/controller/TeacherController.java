@@ -43,9 +43,9 @@ public class TeacherController {
 
   @GetMapping("/teachers/{teacherId}")
   @PreAuthorize("hasRole('ADMIN')")
-  public Teacher getOne(@PathVariable("teacherId") Long studentId) {    
-      return teacherRepository.findById(studentId)
-        .orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", studentId));
+  public Teacher getOne(@PathVariable("teacherId") Long teacherId) {    
+      return teacherRepository.findById(teacherId)
+        .orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", teacherId));
   }
 
   @PostMapping("/teachers")

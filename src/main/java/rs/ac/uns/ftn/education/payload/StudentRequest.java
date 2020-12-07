@@ -28,6 +28,9 @@ public class StudentRequest {
   @NotBlank
   @Email
   private String email;
+  
+  @NotBlank
+  private String phoneNumber;
 
   @NotBlank
   private String personalIdNumber;

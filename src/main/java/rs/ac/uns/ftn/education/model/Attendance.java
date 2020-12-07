@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @SuppressWarnings("unused")
+@Getter @Setter @NoArgsConstructor
 public class Attendance {
 
     @Id

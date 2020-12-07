@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.Role;
 import rs.ac.uns.ftn.education.model.Student;
+import rs.ac.uns.ftn.education.model.StudyProgram;
 import rs.ac.uns.ftn.education.payload.StudentRequest;
 import rs.ac.uns.ftn.education.repository.RoleRepository;
 import rs.ac.uns.ftn.education.repository.StudentRepository;
+import rs.ac.uns.ftn.education.service.StudyProgramService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,9 @@ public class StudentController {
 
   @Autowired
   private StudentRepository studentRepository;
+
+  @Autowired
+  private StudyProgramService studyProgramService;
 
   @Autowired
   private ModelMapper modelMapper;
@@ -59,6 +64,15 @@ public class StudentController {
       student.setRoles(Collections.singleton(studentRole));
 
       return studentRepository.save(student);
+  }
+
+  @PutMapping("/students/{studentId}/enroll/{studyProgramId}")
+  public Student enroll(@PathVariable("studentId") Long studentId, @PathVariable("studyProgramId") Long studyProgramId) {
+    Student student = getOne(studentId);
+    StudyProgram studyProgram = studyProgramService.getOne(studyProgramId);
+
+    student.setStudyProgram(studyProgram);
+    return studentRepository.save(student);
   }
 
   @DeleteMapping("/students/{studentId}")

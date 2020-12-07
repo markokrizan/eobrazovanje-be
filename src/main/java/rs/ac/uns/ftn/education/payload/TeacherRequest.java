@@ -30,6 +30,9 @@ public class TeacherRequest {
   private String email;
 
   @NotBlank
+  private String phoneNumber;
+
+  @NotBlank
   private String personalIdNumber;
 
   @NotBlank

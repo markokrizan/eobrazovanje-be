@@ -14,7 +14,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name="documents")
-@Getter @Setter @NoArgsConstructor @SuppressWarnings("unused")
+@Getter @Setter @NoArgsConstructor
 public class Document {
     
     @Id

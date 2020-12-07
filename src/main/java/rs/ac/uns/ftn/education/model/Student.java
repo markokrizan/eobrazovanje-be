@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.education.model;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -19,4 +21,7 @@ public class Student extends User {
 
     private String schoolIdNumber;
 
+    @OneToOne
+    @JoinColumn(name = "study_program_id", nullable=true)
+    private StudyProgram studyProgram;
 }
