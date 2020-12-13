@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.education.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -21,7 +22,7 @@ public class Student extends User {
 
     private String schoolIdNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "study_program_id", nullable=true)
     private StudyProgram studyProgram;
 }

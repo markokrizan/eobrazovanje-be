@@ -17,5 +17,7 @@ public class StudyProgram {
 
   private String studyField;
 
+  private String prefix;
+
   private String name; 
 }

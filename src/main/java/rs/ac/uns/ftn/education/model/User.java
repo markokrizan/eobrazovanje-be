@@ -18,7 +18,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
-            "username"
+            "username",
+            "email",
+            "personalIdNumber"
         })
 })
 @Inheritance(strategy = InheritanceType.JOINED)

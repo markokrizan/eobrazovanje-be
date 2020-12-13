@@ -10,6 +10,8 @@ import rs.ac.uns.ftn.education.payload.SignUpRequest;
 import rs.ac.uns.ftn.education.repository.RoleRepository;
 import rs.ac.uns.ftn.education.repository.UserRepository;
 import rs.ac.uns.ftn.education.security.JwtTokenProvider;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +49,9 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -69,13 +74,8 @@ public class AuthController {
             return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
-        
-        User user = new User(
-                signUpRequest.getFirstName(), 
-                signUpRequest.getLastName(),
-                signUpRequest.getUsername(),
-                signUpRequest.getPassword()
-        );
+
+        User user = modelMapper.map(signUpRequest, User.class);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

@@ -15,5 +15,8 @@ public class StudyProgramRequest {
   private String name;
 
   @NotBlank
+  private String prefix;
+
+  @NotBlank
   private String studyField;
 }
