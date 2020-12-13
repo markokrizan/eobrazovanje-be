@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -73,5 +74,13 @@ public class User extends DateAudit {
         this.lastName = lastName;
         this.username = username;
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        User that = (User) other;
+        return Objects.equals(id, that.id);
     }
 }

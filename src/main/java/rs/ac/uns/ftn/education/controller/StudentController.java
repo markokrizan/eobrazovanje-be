@@ -35,8 +35,8 @@ public class StudentController {
   }
 
   @PostMapping("/students")
-  @PreAuthorize("hasRole('ADMIN')")
-  public Student save(@Valid @RequestBody StudentRequest studentRequest) {
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleSavingSelf('ROLE_STUDENT', #studentRequest, #currentUser)")
+  public Student save(@Valid @RequestBody StudentRequest studentRequest, @CurrentUser UserPrincipal currentUser) {
     return studentService.save(studentRequest);
   }
 

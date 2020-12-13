@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.education.model.Role;
 import rs.ac.uns.ftn.education.model.User;
+import rs.ac.uns.ftn.education.payload.UserRequest;
 import rs.ac.uns.ftn.education.security.UserPrincipal;
 
 
@@ -32,5 +33,13 @@ public class SecurityService {
       default:
         return false;
     }
+  }
+
+  public boolean isRoleSavingSelf(String role, UserRequest userRequest, UserPrincipal currentUser) {
+    if (userRequest.getId() == null) {
+      return false;
+    }
+
+    return userRequest.getId() == currentUser.getId();
   }
 }
