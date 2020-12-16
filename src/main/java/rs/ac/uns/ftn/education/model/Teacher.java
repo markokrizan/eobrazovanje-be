@@ -12,6 +12,6 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class Teacher extends User {
 
-    private AcademicTitle academicTitle;
+    private String academicTitle;
 
 }
