@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="engagements")
-@Getter @Setter @NoArgsConstructor @SuppressWarnings("unused")
+@Getter @Setter @NoArgsConstructor
 public class Engagement {
 
     @Id
@@ -26,4 +26,8 @@ public class Engagement {
     @ManyToOne
     @JoinColumn(name="course_id", nullable=false)
     private Course course;
+
+    @ManyToOne
+    @JoinColumn(name="teacher_id", nullable=false)
+    private Teacher teacher;
 }

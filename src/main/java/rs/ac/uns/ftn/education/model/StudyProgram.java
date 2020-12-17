@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.education.model;
 
+import java.util.Set;
 import javax.persistence.*;
 
 import lombok.Getter;
@@ -20,4 +21,15 @@ public class StudyProgram {
   private String prefix;
 
   private String name; 
+
+  private Integer espbPoints;
+
+  private StudyProgramType studyProgramType;
+
+  @ManyToMany
+  @JoinTable(
+    name = "study_program_course", 
+    joinColumns = @JoinColumn(name = "study_program_id"), 
+    inverseJoinColumns = @JoinColumn(name = "course_id"))
+  private Set<Course> courses;
 }
