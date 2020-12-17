@@ -44,6 +44,12 @@ public class StudyProgramController {
       return studyProgramService.save(studyProgram);
   }
 
+  @PutMapping("/study-programs/{studyProgramId}/add-course/{courseId}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public StudyProgram save(@PathVariable("studyProgramId") Long studyProgramId, @PathVariable("studyProgramId") Long courseId) {
+      return studyProgramService.addCourse(studyProgramId, courseId);
+  }
+
   @DeleteMapping("/study-programs/{studyProgramId}")
   @PreAuthorize("hasRole('ADMIN')")
   public void delete(@PathVariable("studentId") Long studyProgramId) {

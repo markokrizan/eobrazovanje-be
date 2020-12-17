@@ -43,6 +43,10 @@ public class Course {
     private Set<StudyProgram> studyPrograms;
 
     public Long getTotalExamPoints() {
+        if (this.exams == null) {
+            return 0L;
+        }
+
         return exams.stream().mapToLong(exam -> exam.getPoints()).sum();
     }
 }

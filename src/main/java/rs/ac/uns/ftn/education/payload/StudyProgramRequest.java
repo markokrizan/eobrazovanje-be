@@ -4,7 +4,9 @@ import javax.validation.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;
+import rs.ac.uns.ftn.education.model.Course;
 import lombok.NoArgsConstructor;
+import java.util.Set;
 
 @Getter @Setter @NoArgsConstructor
 public class StudyProgramRequest {
@@ -19,4 +21,6 @@ public class StudyProgramRequest {
 
   @NotBlank
   private String studyField;
+
+  Set<Course> courses; 
 }
