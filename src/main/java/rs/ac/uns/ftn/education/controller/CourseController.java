@@ -30,6 +30,12 @@ public class CourseController {
     return courseService.getAll(pageable);
   }
 
+  @GetMapping("/study-programs/{studyProgramId}/courses")
+  @PreAuthorize("hasRole('ADMIN')")
+  public Page<Course> getStudyProgramCourses(@PathVariable("studyProgramId") Long studyProgramId, @PageableDefault(size = 10) Pageable pageable) {
+    return courseService.getStudyProgramCourses(studyProgramId, pageable);
+  }
+
   @GetMapping("/courses/{courseId}")
   @PreAuthorize("hasRole('ADMIN')")
   public Course getOne(@PathVariable("courseId") Long courseId) {

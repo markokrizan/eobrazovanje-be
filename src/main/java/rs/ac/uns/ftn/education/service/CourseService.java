@@ -26,6 +26,10 @@ public class CourseService {
     return courseRepository.findAll(pageable);
   }
 
+  public Page<Course> getStudyProgramCourses(Long studyProgramId, Pageable pageable) {
+    return courseRepository.findByStudyPrograms_Id(studyProgramId, pageable);
+  }
+
   public Course getOne(Long courseId) {    
     return courseRepository.findById(courseId)
       .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
