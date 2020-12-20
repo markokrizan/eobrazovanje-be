@@ -2,5 +2,6 @@ package rs.ac.uns.ftn.education.model;
 
 public enum Semester {
   SUMMER,
-  WINTER
+  WINTER,
+  SUMMER_WINTER
 }
