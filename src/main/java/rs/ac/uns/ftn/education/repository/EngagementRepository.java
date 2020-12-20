@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.education.repository;
 
-import rs.ac.uns.ftn.education.model.Course;
+import rs.ac.uns.ftn.education.model.Engagement;
 
-public interface EngagementRepository extends BaseRepository<Course, Long> {
+public interface EngagementRepository extends BaseRepository<Engagement, Long> {
     
 }

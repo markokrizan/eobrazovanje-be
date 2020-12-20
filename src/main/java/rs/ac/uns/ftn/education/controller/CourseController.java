@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,9 @@ public class CourseController {
 
   @Autowired
   private CourseService courseService;
+
+  @Autowired
+  private ModelMapper modelMapper;
 
   @GetMapping("/courses")
   @PreAuthorize("hasRole('ADMIN')")
@@ -45,7 +49,15 @@ public class CourseController {
   @PostMapping("/courses")
   @PreAuthorize("hasRole('ADMIN')")
   public Course save(@Valid @RequestBody CourseRequest courseRequest) {
-      return courseService.save(courseRequest);
+    Course course = modelMapper.map(courseRequest, Course.class);
+
+    return courseService.save(course);
+  }
+
+  @DeleteMapping("/courses/{courseId}/engagement/{engagementId}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public Course removeEngagement(@PathVariable("courseId") Long courseId, @PathVariable("engagementId") Long engagementId) {
+      return courseService.removeEngagement(courseId, engagementId);
   }
 
   @DeleteMapping("/courses/{courseId}")
