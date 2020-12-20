@@ -54,12 +54,6 @@ public class CourseController {
     return courseService.save(course);
   }
 
-  @DeleteMapping("/courses/{courseId}/engagement/{engagementId}")
-  @PreAuthorize("hasRole('ADMIN')")
-  public Course removeEngagement(@PathVariable("courseId") Long courseId, @PathVariable("engagementId") Long engagementId) {
-      return courseService.removeEngagement(courseId, engagementId);
-  }
-
   @DeleteMapping("/courses/{courseId}")
   @PreAuthorize("hasRole('ADMIN')")
   public void delete(@PathVariable("courseId") Long courseId) {
