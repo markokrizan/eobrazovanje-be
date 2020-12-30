@@ -22,7 +22,6 @@ public class TeacherController {
   @Autowired
   private TeacherService teacherService;
 
-  
   @GetMapping("/teachers")
   @PreAuthorize("hasRole('ADMIN')")
   public Page<Teacher> getAll(@PageableDefault(size = 10) Pageable pageable) {
