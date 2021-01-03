@@ -37,7 +37,7 @@ public class ExamRegistration extends DateAudit {
   @JsonIgnoreProperties(value={"studyProgram", "roles"})
   private Student student;
 
-  private Term term;
+  private TermType term;
 
   private ExamRegistrationStatus examRegistrationStatus = ExamRegistrationStatus.REGISTERED;
 }
