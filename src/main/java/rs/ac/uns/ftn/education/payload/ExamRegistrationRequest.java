@@ -1,10 +1,9 @@
 package rs.ac.uns.ftn.education.payload;
 
 import javax.validation.constraints.NotNull;
-import rs.ac.uns.ftn.education.model.Course;
+import rs.ac.uns.ftn.education.model.Exam;
 import rs.ac.uns.ftn.education.model.ExamRegistrationStatus;
 import rs.ac.uns.ftn.education.model.Student;
-import rs.ac.uns.ftn.education.model.TermType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,10 +14,7 @@ public class ExamRegistrationRequest {
   private Long id;
 
   @NotNull
-  private TermType term;
-
-  @NotNull
-  private Course course;
+  private Exam exam;
 
   @NotNull
   private Student student;

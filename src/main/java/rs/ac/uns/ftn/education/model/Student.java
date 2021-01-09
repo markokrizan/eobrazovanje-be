@@ -1,5 +1,9 @@
 package rs.ac.uns.ftn.education.model;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -22,7 +26,18 @@ public class Student extends User {
 
     private String schoolIdNumber;
 
+    private Year currentStudyYear;
+
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "study_program_id", nullable=true)
     private StudyProgram studyProgram;
+
+    public List<Year> getCurrentAndPreviousStudyYears() {
+        List<Year> years = Arrays.asList(Year.values());
+
+        return years
+            .stream()
+            .filter(year -> year.ordinal() <= currentStudyYear.ordinal())
+            .collect(Collectors.toList());
+    }
 }

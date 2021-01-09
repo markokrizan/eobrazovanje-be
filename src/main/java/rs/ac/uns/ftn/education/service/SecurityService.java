@@ -74,7 +74,7 @@ public class SecurityService {
     }
 
     return engagementRepository.findByCourse_IdAndTeacher_Id(
-      gradeRequest.getCourse().getId(),
+      gradeRequest.getExamRegistration().getExam().getCourse().getId(),
       currentUser.getId()
     ) != null;
   }

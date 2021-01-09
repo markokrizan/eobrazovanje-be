@@ -8,15 +8,20 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.uns.ftn.education.model.Term;
+import rs.ac.uns.ftn.education.model.Course;
 
 @Getter @Setter @NoArgsConstructor
-public class TermRequest {
-  @NotBlank
-  private String name;
-  
+public class ExamRequest {
   @NotNull
-  private Date from;
+  private Date examDate;
+
+  @NotBlank
+  private String location;
 
   @NotNull
-  private Date to;
+  private Term term;
+
+  @NotNull
+  private Course course;
 }

@@ -1,11 +1,9 @@
 package rs.ac.uns.ftn.education.model;
 
-import java.time.MonthDay;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +15,7 @@ import lombok.NoArgsConstructor;
 public class Term extends BaseModel {
     private String name;
 
-    @JsonFormat(pattern = "dd/MM")
-    private MonthDay from;
+    private Date from;
 
-    @JsonFormat(pattern = "dd/MM")
-    private MonthDay to;
+    private Date to;
 }

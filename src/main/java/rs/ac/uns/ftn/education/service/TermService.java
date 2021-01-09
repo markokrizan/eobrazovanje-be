@@ -25,6 +25,10 @@ public class TermService {
         .orElseThrow(() -> new ResourceNotFoundException("Term", "id", termId));
   }
 
+  public Term getCurrentTerm() {
+    return termRepository.getCurrentTerm();
+  }
+
   public Term save(Term term) {
     return termRepository.save(term);
   }

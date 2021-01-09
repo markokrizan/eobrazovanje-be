@@ -19,7 +19,7 @@ import rs.ac.uns.ftn.education.model.audit.DateAudit;
 @Entity
 @Table(
   name = "grades",
-  uniqueConstraints = @UniqueConstraint(columnNames={"course_id", "student_id"})
+  uniqueConstraints = @UniqueConstraint(columnNames={"exam_id", "student_id", "exam_registration_id"})
 )
 @Getter @Setter @NoArgsConstructor
 public class Grade extends DateAudit {
@@ -29,14 +29,13 @@ public class Grade extends DateAudit {
   private Long id;
 
   @OneToOne
-  @JoinColumn(name = "course_id", nullable = false)
-  @JsonIgnoreProperties("studyPrograms")
-  private Course course;
-
-  @OneToOne
   @JoinColumn(name = "student_id", nullable = false)
   @JsonIgnoreProperties(value={"studyProgram", "roles"})
   private Student student;
+
+  @OneToOne
+  @JoinColumn(name = "exam_id", nullable = false)
+  private Exam exam;
 
   @OneToOne
   @JoinColumn(name = "exam_registration_id", nullable = false)

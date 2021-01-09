@@ -31,6 +31,8 @@ public class Course {
 
     private String name;
 
+    private Year year;
+
     private Semester semester;
 
     private Integer espbPoints;
@@ -38,18 +40,7 @@ public class Course {
     @OneToMany(mappedBy="course")
     private Set<Engagement> engagements;
 
-    @OneToMany(mappedBy="course")
-    private Set<Exam> exams;
-
     @JsonIgnoreProperties("courses")
     @ManyToMany(mappedBy = "courses")
     private Set<StudyProgram> studyPrograms;
-
-    public Long getTotalExamPoints() {
-        if (this.exams == null) {
-            return 0L;
-        }
-
-        return exams.stream().mapToLong(exam -> exam.getPoints()).sum();
-    }
 }

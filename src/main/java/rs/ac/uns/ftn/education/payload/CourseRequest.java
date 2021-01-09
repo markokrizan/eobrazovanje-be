@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.education.payload;
 
+import java.time.Year;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,9 @@ public class CourseRequest {
 
   @NotNull
   private Semester semester;
+
+  @NotNull
+  private Year year;
 
   @NotNull
   private Integer espbPoints;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.ExamRegistration;
+import rs.ac.uns.ftn.education.model.ExamRegistrationStatus;
 import rs.ac.uns.ftn.education.repository.ExamRegistrationRepository;
 
 @Service
@@ -29,7 +30,11 @@ public class ExamRegistrationService {
   }
 
   public Page<ExamRegistration> getTeacherExamRegistrations(Long teacherId, Pageable pageable) {
-    return examRegistrationRepository.findByCourse_Engagements_Teacher_Id(teacherId, pageable);
+    return examRegistrationRepository.findByExam_Course_Engagements_Teacher_IdAndExamRegistrationStatus(
+      teacherId,
+      pageable,
+      ExamRegistrationStatus.REGISTERED
+    );
   }
 
   public ExamRegistration save(ExamRegistration examRegistration) {
