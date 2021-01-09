@@ -37,10 +37,6 @@ public class GradeService {
   }
 
   public Grade save(Grade grade) {
-    if(grade.getExam().getExamDate().before(new Date())) {
-      throw new AppException("Cannot enter grade - exam hasn't started yet");
-    }
-
     Grade savedGrade = gradeRepository.save(grade);
     gradeRepository.refresh(savedGrade);
 
