@@ -1,10 +1,13 @@
 package rs.ac.uns.ftn.education.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.education.exception.AppException;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.ExamRegistration;
 import rs.ac.uns.ftn.education.model.ExamRegistrationStatus;
@@ -34,6 +37,10 @@ public class GradeService {
   }
 
   public Grade save(Grade grade) {
+    if(grade.getExam().getExamDate().before(new Date())) {
+      throw new AppException("Cannot enter grade - exam hasn't started yet");
+    }
+
     Grade savedGrade = gradeRepository.save(grade);
     gradeRepository.refresh(savedGrade);
 
