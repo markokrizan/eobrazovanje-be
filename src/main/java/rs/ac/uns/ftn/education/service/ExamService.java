@@ -52,6 +52,15 @@ public class ExamService {
     );
   }
 
+  public List<Exam> getPassedExams(Long studentId) {
+    Student student = studentService.getOne(studentId);
+
+    return examRepository.getPassedExams(
+      studentId,
+      student.getStudyProgram().getId()
+    );
+  }
+
   public Exam save(Exam exam) {
     Exam savedExam = examRepository.save(exam);
     examRepository.refresh(savedExam);

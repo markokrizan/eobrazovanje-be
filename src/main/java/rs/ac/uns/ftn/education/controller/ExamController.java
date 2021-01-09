@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import rs.ac.uns.ftn.education.model.Exam;
 import rs.ac.uns.ftn.education.payload.ExamRequest;
+import rs.ac.uns.ftn.education.security.CurrentUser;
+import rs.ac.uns.ftn.education.security.UserPrincipal;
 import rs.ac.uns.ftn.education.service.ExamService;
 
 import org.modelmapper.ModelMapper;
@@ -33,9 +35,15 @@ public class ExamController {
   }
 
   @GetMapping("/exams/{studentId}/registrable")
-  @PreAuthorize("hasRole('ADMIN')")
-  public List<Exam> getPossibleStudentExamRegistrationExams(@PathVariable("studentId") Long studentId) {
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
+  public List<Exam> getPossibleStudentExamRegistrationExams(@PathVariable("studentId") Long studentId, @CurrentUser UserPrincipal currentUser) {
     return examService.getPossibleStudentExamRegistrationExams(studentId);
+  }
+
+  @GetMapping("/exams/{studentId}/passed")
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
+  public List<Exam> getPassedExams(@PathVariable("studentId") Long studentId, @CurrentUser UserPrincipal currentUser) {
+    return examService.getPassedExams(studentId);
   }
 
   @GetMapping("/exams/{examId}")

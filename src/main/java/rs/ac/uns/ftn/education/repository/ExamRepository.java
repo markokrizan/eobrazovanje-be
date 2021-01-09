@@ -30,4 +30,23 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     @Param("studyYears") List<Integer> studyYears,
     @Param("currentTermId") Long currentTermId
   );
+
+  @Query(
+    value = 
+      "SELECT * " + 
+      "FROM exams " + 
+      "JOIN courses ON exams.course_id = courses.id " +
+      "JOIN study_program_course ON study_program_course.course_id = courses.id " +
+      "JOIN study_programs ON study_program_course.study_program_id = study_programs.id " +
+      "JOIN grades ON grades.student_id = :studentId " +
+      "WHERE " + 
+        "study_program_course.study_program_id = :studyProgramId AND " +
+        "grades.grade_type > 0"
+    , 
+    nativeQuery = true
+  )
+  List<Exam> getPassedExams(
+    @Param("studentId") Long studentId, 
+    @Param("studyProgramId") Long studyProgramId
+  );
 }
