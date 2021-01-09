@@ -42,10 +42,10 @@ public class GradeController {
     return gradeService.getStudentGrades(studentId, pageable);
   }
 
-  @GetMapping("/grades/{examRegistrationId}")
-  @PreAuthorize("hasRole('ADMIN')")
-  public Grade getOne(@PathVariable("examRegistrationId") Long examRegistrationId) {
-    return gradeService.getOne(examRegistrationId);
+  @GetMapping("/grades/{gradeId}")
+  // TODO: Admin, student whose grade this is and teacher if the grade is for a course he has an enrollment on
+  public Grade getOne(@PathVariable("examRegistrationId") Long gradeId) {
+    return gradeService.getOne(gradeId);
   }
 
   @PostMapping("/grades")

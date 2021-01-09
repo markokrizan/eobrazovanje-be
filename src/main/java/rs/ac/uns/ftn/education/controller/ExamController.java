@@ -47,13 +47,13 @@ public class ExamController {
   }
 
   @GetMapping("/exams/{examId}")
-  @PreAuthorize("hasRole('ADMIN')")
+  //TODO: Security: admin, teacher that has an engagement for that course, student that is in a study program that contains this course
   public Exam getOne(@PathVariable("examId") Long examId) {
     return examService.getOne(examId);
   }
 
   @PostMapping("/exams")
-  @PreAuthorize("hasRole('ADMIN')")
+  //TODO: Security: admin, teacher only when the exam is for a course that he has an engagement for
   public Exam save(@Valid @RequestBody ExamRequest examRequest) {
     Exam exam = modelMapper.map(examRequest, Exam.class);
 
