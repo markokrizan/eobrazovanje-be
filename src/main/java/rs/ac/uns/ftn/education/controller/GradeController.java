@@ -43,8 +43,8 @@ public class GradeController {
   }
 
   @GetMapping("/grades/{gradeId}")
-  // TODO: Admin, student whose grade this is and teacher if the grade is for a course he has an enrollment on
-  public Grade getOne(@PathVariable("examRegistrationId") Long gradeId) {
+  @PreAuthorize("hasRole('ADMIN')")
+  public Grade getOne(@PathVariable("gradeId") Long gradeId) {
     return gradeService.getOne(gradeId);
   }
 

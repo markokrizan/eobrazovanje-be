@@ -39,7 +39,7 @@ public class Grade extends DateAudit {
 
   @OneToOne
   @JoinColumn(name = "exam_registration_id", nullable = false)
-  @JsonIgnoreProperties(value={"course", "student"})
+  @JsonIgnoreProperties(value={"course", "student", "exam"})
   private ExamRegistration examRegistration;
 
   private GradeType gradeType;
