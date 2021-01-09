@@ -9,9 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.uns.ftn.education.model.Term;
+import rs.ac.uns.ftn.education.payload.validation.ExamDate;
 import rs.ac.uns.ftn.education.model.Course;
 
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @ExamDate
 public class ExamRequest {
   @NotNull
   private Date examDate;
