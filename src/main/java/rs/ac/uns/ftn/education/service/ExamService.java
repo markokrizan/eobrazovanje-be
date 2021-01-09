@@ -36,7 +36,7 @@ public class ExamService {
         .orElseThrow(() -> new ResourceNotFoundException("Exam", "id", examId));
   }
 
-  public List<Exam> getPossibleStudentExamRegistrationExams(Long studentId) {
+  public Page<Exam> getPossibleStudentExamRegistrationExams(Long studentId, Pageable pageable) {
     Student student = studentService.getOne(studentId);
     List<Integer> currentAndPreviousYears = student.getCurrentAndPreviousStudyYears()
       .stream()
@@ -48,16 +48,18 @@ public class ExamService {
       studentId, 
       student.getStudyProgram().getId(), 
       currentAndPreviousYears, 
-      currentTerm.getId()
+      currentTerm.getId(),
+      pageable
     );
   }
 
-  public List<Exam> getPassedExams(Long studentId) {
+  public Page<Exam> getPassedExams(Long studentId, Pageable pageable) {
     Student student = studentService.getOne(studentId);
 
     return examRepository.getPassedExams(
       studentId,
-      student.getStudyProgram().getId()
+      student.getStudyProgram().getId(),
+      pageable
     );
   }
 

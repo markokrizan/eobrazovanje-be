@@ -2,6 +2,8 @@ package rs.ac.uns.ftn.education.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,11 +26,12 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     , 
     nativeQuery = true
   )
-  List<Exam> getPossibleStudentExamRegistrationExams(
+  Page<Exam> getPossibleStudentExamRegistrationExams(
     @Param("studentId") Long studentId, 
     @Param("studyProgramId") Long studyProgramId,
     @Param("studyYears") List<Integer> studyYears,
-    @Param("currentTermId") Long currentTermId
+    @Param("currentTermId") Long currentTermId,
+    Pageable pageable
   );
 
   @Query(
@@ -45,8 +48,9 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     , 
     nativeQuery = true
   )
-  List<Exam> getPassedExams(
+  Page<Exam> getPassedExams(
     @Param("studentId") Long studentId, 
-    @Param("studyProgramId") Long studyProgramId
+    @Param("studyProgramId") Long studyProgramId,
+    Pageable pageable
   );
 }

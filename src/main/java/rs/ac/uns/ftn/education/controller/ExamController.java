@@ -34,16 +34,24 @@ public class ExamController {
     return examService.getAll(pageable);
   }
 
-  @GetMapping("/exams/{studentId}/registrable")
+  @GetMapping("/students/{studentId}/registrable-exams")
   @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
-  public List<Exam> getPossibleStudentExamRegistrationExams(@PathVariable("studentId") Long studentId, @CurrentUser UserPrincipal currentUser) {
-    return examService.getPossibleStudentExamRegistrationExams(studentId);
+  public Page<Exam> getPossibleStudentExamRegistrationExams(
+    @PathVariable("studentId") Long studentId,
+    @CurrentUser UserPrincipal currentUser, 
+    Pageable pageable  
+  ) {
+    return examService.getPossibleStudentExamRegistrationExams(studentId, pageable);
   }
 
-  @GetMapping("/exams/{studentId}/passed")
+  @GetMapping("/students/{studentId}/passed-exams")
   @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
-  public List<Exam> getPassedExams(@PathVariable("studentId") Long studentId, @CurrentUser UserPrincipal currentUser) {
-    return examService.getPassedExams(studentId);
+  public Page<Exam> getPassedExams(
+    @PathVariable("studentId") Long studentId,
+    @CurrentUser UserPrincipal currentUser,
+    Pageable pageable
+  ) {
+    return examService.getPassedExams(studentId, pageable);
   }
 
   @GetMapping("/exams/{examId}")
