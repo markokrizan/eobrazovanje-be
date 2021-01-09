@@ -32,8 +32,8 @@ public class ExamRegistrationService {
   public Page<ExamRegistration> getTeacherExamRegistrations(Long teacherId, Pageable pageable) {
     return examRegistrationRepository.findByExam_Course_Engagements_Teacher_IdAndExamRegistrationStatus(
       teacherId,
-      pageable,
-      ExamRegistrationStatus.REGISTERED
+      ExamRegistrationStatus.REGISTERED,
+      pageable
     );
   }
 

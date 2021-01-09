@@ -9,7 +9,8 @@ import rs.ac.uns.ftn.education.model.ExamRegistrationStatus;
 public interface ExamRegistrationRepository extends BaseRepository<ExamRegistration, Long> {
   Page<ExamRegistration> findByStudent_Id(Long studentId, Pageable pageable);
   Page<ExamRegistration> findByExam_Course_Engagements_Teacher_IdAndExamRegistrationStatus(
-    Long teacherId, Pageable pageable,
-    ExamRegistrationStatus examRegistrationStatus
+    Long teacherId,
+    ExamRegistrationStatus examRegistrationStatus,
+    Pageable pageable
   );
 }
