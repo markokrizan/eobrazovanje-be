@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,5 +28,6 @@ public class Exam extends BaseModel {
 
     @OneToOne
     @JoinColumn(name="course_id", nullable=false)
+    @JsonIgnoreProperties("studyPrograms")
     private Course course;
 }

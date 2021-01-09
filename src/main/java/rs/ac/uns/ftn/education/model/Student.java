@@ -11,6 +11,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +32,7 @@ public class Student extends User {
 
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "study_program_id", nullable=true)
+    @JsonIgnoreProperties("courses")
     private StudyProgram studyProgram;
 
     public List<Year> getCurrentAndPreviousStudyYears() {

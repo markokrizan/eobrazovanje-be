@@ -6,6 +6,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +26,7 @@ public class ExamRegistration extends BaseModel {
 
   @OneToOne
   @JoinColumn(name = "student_id", nullable = false)
+  @JsonIgnoreProperties(value={"roles", "studyProgram"})
   private Student student;
 
   private ExamRegistrationStatus examRegistrationStatus = ExamRegistrationStatus.REGISTERED;
