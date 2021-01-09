@@ -17,8 +17,9 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
       "JOIN courses ON exams.course_id = courses.id " +
       "JOIN study_program_course ON study_program_course.course_id = courses.id " +
       "JOIN study_programs ON study_program_course.study_program_id = study_programs.id " +
-      "LEFT OUTER JOIN grades ON grades.student_id = :studentId " +
+      "LEFT OUTER JOIN grades ON exams.id = grades.exam_id " +
       "WHERE " + 
+        "(grades.student_id = :studentId OR grades.student_id IS NULL) AND " +
         "study_program_course.study_program_id = :studyProgramId AND " +
         "courses.year IN :studyYears AND " +
         "exams.term_id = :currentTermId AND " +
