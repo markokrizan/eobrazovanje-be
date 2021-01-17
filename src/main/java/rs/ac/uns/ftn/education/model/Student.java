@@ -35,6 +35,8 @@ public class Student extends User {
     @JsonIgnoreProperties("courses")
     private StudyProgram studyProgram;
 
+    private FinancialStatus financialStatus;
+
     public List<Year> getCurrentAndPreviousStudyYears() {
         List<Year> years = Arrays.asList(Year.values());
 

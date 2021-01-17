@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.uns.ftn.education.model.FinancialStatus;
 import rs.ac.uns.ftn.education.model.StudyProgram;
 import rs.ac.uns.ftn.education.model.Year;
 
@@ -16,4 +17,7 @@ public class StudentRequest extends UserRequest {
 
   @NotNull
   private Year currentStudyYear;
+
+  @NotNull
+  private FinancialStatus financialStatus;
 }
