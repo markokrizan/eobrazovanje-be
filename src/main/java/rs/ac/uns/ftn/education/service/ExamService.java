@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.education.exception.AppException;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.Exam;
 import rs.ac.uns.ftn.education.model.Student;
@@ -43,6 +44,10 @@ public class ExamService {
       .map(year -> year.ordinal())
       .collect(Collectors.toList());
     Term currentTerm = termService.getCurrentTerm();
+
+    if (currentTerm == null) {
+      throw new AppException("There is no active term, check from and to dates of terms you have currently set up!");
+    }
 
     return examRepository.getPossibleStudentExamRegistrationExams(
       studentId, 
