@@ -3,7 +3,8 @@ package rs.ac.uns.ftn.education.service.report;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.List;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -29,16 +30,16 @@ public class DocumentCreatorHelper {
     document.add(new Paragraph("\n"));
   }
 
-  public static void addTable(Document document) throws DocumentException {
-    PdfPTable table = new PdfPTable(3);
-    DocumentCreatorHelper.addTableHeader(table);
-    DocumentCreatorHelper.addRows(table);
+  public static void addTable(Document document, Integer columns, String[] columnNames, List<String> cells) throws DocumentException {
+    PdfPTable table = new PdfPTable(columns);
+    DocumentCreatorHelper.addTableHeader(table, columnNames);
+    DocumentCreatorHelper.addRows(table, cells);
 
     document.add(table);
   }
 
-  private static void addTableHeader(PdfPTable table) {
-    Stream.of("column header 1", "column header 2", "column header 3")
+  private static void addTableHeader(PdfPTable table, String[] columnNames) {
+    Arrays.stream(columnNames)
       .forEach(columnTitle -> {
         PdfPCell header = new PdfPCell();
         header.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -48,9 +49,7 @@ public class DocumentCreatorHelper {
     });
   }
 
-  private static void addRows(PdfPTable table) {
-    table.addCell("row 1, col 1");
-    table.addCell("row 1, col 2");
-    table.addCell("row 1, col 3");
+  private static void addRows(PdfPTable table, List<String> cells) {
+    cells.stream().forEach(cellText -> table.addCell(cellText));
   }
 }
