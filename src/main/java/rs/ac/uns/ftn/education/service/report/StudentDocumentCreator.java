@@ -46,6 +46,15 @@ public class StudentDocumentCreator implements DocumentCreator {
     DocumentCreatorHelper.addText(document, "Last name: ", DocumentCreatorHelper.FONT_BOLD, false);
     DocumentCreatorHelper.addText(document, student.getLastName(), null, true);
 
+    DocumentCreatorHelper.addText(document, "School id: ", DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getSchoolIdNumber(), null, true);
+
+    DocumentCreatorHelper.addText(document, "Email: ", DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getEmail(), null, true);
+
+    DocumentCreatorHelper.addText(document, "Phone number: ", DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getPhoneNumber(), null, true);
+
     DocumentCreatorHelper.addText(document, "Study program: ", DocumentCreatorHelper.FONT_BOLD, false);
     DocumentCreatorHelper.addText(document, student.getStudyProgram().getName(), null, true);
 
