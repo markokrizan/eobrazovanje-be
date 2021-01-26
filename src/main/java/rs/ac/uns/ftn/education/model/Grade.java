@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.uns.ftn.education.exception.AppException;
 import rs.ac.uns.ftn.education.model.audit.DateAudit;
 
 @Entity
@@ -43,4 +44,23 @@ public class Grade extends DateAudit {
   private ExamRegistration examRegistration;
 
   private GradeType gradeType;
+
+  public Integer getGradeValue() {
+    switch(gradeType) {
+      case FIVE:
+        return 5;
+      case SIX:
+        return 6;
+      case SEVEN:
+        return 7;
+      case EIGHT:
+        return 8;
+      case NINE:
+        return 9;
+      case TEN:
+        return 10;
+      default:
+        throw new AppException("No such grade exists!");
+    }
+  }
 }

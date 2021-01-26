@@ -15,8 +15,6 @@ import rs.ac.uns.ftn.education.service.StudentService;
 import rs.ac.uns.ftn.education.model.Student;
 import rs.ac.uns.ftn.education.model.Grade;
 
-import com.itextpdf.text.Font;
-
 @Component
 public class StudentDocumentCreator implements DocumentCreator {
 
@@ -35,23 +33,25 @@ public class StudentDocumentCreator implements DocumentCreator {
   public void create(Document document, Long studentId) throws DocumentException {
     Student student = studentService.getOne(studentId);
 
-    Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+    DocumentCreatorHelper.addTitle(document, "Student report");
 
-    DocumentCreatorHelper.addText(document, "Student report", titleFont);
-    DocumentCreatorHelper.addNewLine(document);
-    DocumentCreatorHelper.addText(document, "First name: " + student.getFirstName(), null);
-    DocumentCreatorHelper.addNewLine(document);
-    DocumentCreatorHelper.addText(document, "Last name: " + student.getLastName(), null);
-    DocumentCreatorHelper.addNewLine(document);
-    DocumentCreatorHelper.addText(document, "Study program: " + student.getStudyProgram().getName(), null);
-    DocumentCreatorHelper.addNewLine(document);
-    DocumentCreatorHelper.addText(document, "Current year: " + student.getCurrentStudyYear(), null);
-    DocumentCreatorHelper.addNewLine(document);
-    DocumentCreatorHelper.addText(document, "Financial status: " + student.getFinancialStatus(), null);
-    DocumentCreatorHelper.addNewLine(document);
+    DocumentCreatorHelper.addText(document, "First name: ", DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getFirstName(), null, true);
 
-    DocumentCreatorHelper.addText(document, "Passed exams: ", null);
-    DocumentCreatorHelper.addNewLine(document);
+    DocumentCreatorHelper.addText(document, "Last name: ", DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getLastName(), null, true);
+
+    DocumentCreatorHelper.addText(document, "Study program: ", DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getStudyProgram().getName(), null, true);
+
+    DocumentCreatorHelper.addText(document, "Current year: " , DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getCurrentStudyYear().name(), null, true);
+
+    DocumentCreatorHelper.addText(document, "Financial status: " , DocumentCreatorHelper.FONT_BOLD, false);
+    DocumentCreatorHelper.addText(document, student.getFinancialStatus().name(), null, true);
+
+    DocumentCreatorHelper.addSeparator(document);
+    DocumentCreatorHelper.addText(document, "Passed exams: ", DocumentCreatorHelper.FONT_BOLD, true);
 
     Stream<Grade> grades = gradeService.getStudentGrades(studentId, Pageable.unpaged()).get();
 
@@ -61,9 +61,14 @@ public class StudentDocumentCreator implements DocumentCreator {
 
     grades.forEach(grade -> {
       cells.add(grade.getExam().getCourse().getName());
-      cells.add(grade.getGradeType().name());
+      cells.add(grade.getGradeValue().toString());
     });
 
     DocumentCreatorHelper.addTable(document, numberOfColumns, columnNames, cells);
+    DocumentCreatorHelper.addNewLine(document);
+
+    DocumentCreatorHelper.addText(document, "Average grade: " + student.getAverageGrade(), DocumentCreatorHelper.FONT_BOLD, true);
+
+    DocumentCreatorHelper.addSeparator(document);
   }
 }

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.education.model;
 
+import java.util.Set;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -44,5 +46,15 @@ public class Student extends User {
             .stream()
             .filter(year -> year.ordinal() <= currentStudyYear.ordinal())
             .collect(Collectors.toList());
+    }
+
+    @OneToMany(mappedBy = "student")
+    @JsonIgnoreProperties("student")
+    private Set<Grade> grades;
+
+    public double getAverageGrade() {
+        return (double) grades.stream()
+            .mapToInt(grade -> grade.getGradeValue())
+            .sum() / grades.size();
     }
 }
