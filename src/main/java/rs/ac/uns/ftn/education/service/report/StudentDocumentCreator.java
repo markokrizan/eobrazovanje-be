@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 
+import rs.ac.uns.ftn.education.service.ExamRegistrationService;
 import rs.ac.uns.ftn.education.service.GradeService;
 import rs.ac.uns.ftn.education.service.StudentService;
 import rs.ac.uns.ftn.education.model.Student;
+import rs.ac.uns.ftn.education.model.ExamRegistration;
 import rs.ac.uns.ftn.education.model.Grade;
 
 @Component
@@ -23,6 +25,9 @@ public class StudentDocumentCreator implements DocumentCreator {
 
   @Autowired
   private GradeService gradeService;
+
+  @Autowired
+  private ExamRegistrationService examRegistrationService;
 
   @Override
   public DocumentCreatorType getType() {
@@ -55,19 +60,38 @@ public class StudentDocumentCreator implements DocumentCreator {
 
     Stream<Grade> grades = gradeService.getStudentGrades(studentId, Pageable.unpaged()).get();
 
-    Integer numberOfColumns = 2;
-    String[] columnNames = { "Course", "Grade" }; 
-    List<String> cells = new ArrayList<String>();
+    Integer gradeTableColumns = 2;
+    String[] gradeTableColumnNames = { "Course", "Grade" }; 
+    List<String> gradeTableCells = new ArrayList<String>();
 
     grades.forEach(grade -> {
-      cells.add(grade.getExam().getCourse().getName());
-      cells.add(grade.getGradeValue().toString());
+      gradeTableCells.add(grade.getExam().getCourse().getName());
+      gradeTableCells.add(grade.getGradeValue().toString());
     });
 
-    DocumentCreatorHelper.addTable(document, numberOfColumns, columnNames, cells);
+    DocumentCreatorHelper.addTable(document, gradeTableColumns, gradeTableColumnNames, gradeTableCells);
     DocumentCreatorHelper.addNewLine(document);
 
     DocumentCreatorHelper.addText(document, "Average grade: " + student.getAverageGrade(), DocumentCreatorHelper.FONT_BOLD, true);
+
+    DocumentCreatorHelper.addSeparator(document);
+
+    DocumentCreatorHelper.addText(document, "Exam history: ", DocumentCreatorHelper.FONT_BOLD, true);
+
+    Integer examHistoryTableColumns = 3;
+    String[] examHistoryColumnNames = { "Course", "Exam date", "Status" }; 
+    List<String> examHistoryCells = new ArrayList<String>();
+
+    Stream<ExamRegistration> examRegistrations = examRegistrationService.getStudentExamRegistrations(studentId, Pageable.unpaged()).get();
+
+    examRegistrations.forEach(examRegistration -> {
+      examHistoryCells.add(examRegistration.getExam().getCourse().getName());
+      examHistoryCells.add(examRegistration.getExam().getExamDate().toString());
+      examHistoryCells.add(examRegistration.getExamRegistrationStatus().name());
+    });
+
+    DocumentCreatorHelper.addTable(document, examHistoryTableColumns, examHistoryColumnNames, examHistoryCells);
+    DocumentCreatorHelper.addNewLine(document);
 
     DocumentCreatorHelper.addSeparator(document);
   }
