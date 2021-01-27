@@ -44,3 +44,4 @@ src/main/resources/application-prod.properties
 !/images/.gitkeep 
 !/documents/.gitkeep 
 !/documents/general-terms.pdf
+!/documents/scholarship-pricing.pdf
