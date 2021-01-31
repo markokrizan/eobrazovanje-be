@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.education.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,4 +15,5 @@ public interface ExamRegistrationRepository extends BaseRepository<ExamRegistrat
     ExamRegistrationStatus examRegistrationStatus,
     Pageable pageable
   );
+  Optional<ExamRegistration> findByExam_IdAndStudent_Id(Long examId, Long studentId);
 }
