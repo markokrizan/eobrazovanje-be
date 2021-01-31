@@ -13,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 
 import rs.ac.uns.ftn.education.model.Course;
 import rs.ac.uns.ftn.education.payload.CourseRequest;
+import rs.ac.uns.ftn.education.security.CurrentUser;
+import rs.ac.uns.ftn.education.security.UserPrincipal;
 import rs.ac.uns.ftn.education.service.CourseService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,16 +42,27 @@ public class CourseController {
     return courseService.getStudyProgramCourses(studyProgramId, pageable);
   }
 
+  @GetMapping("/students/{studentId}/courses")
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
+  public Page<Course> getStudentCourses(@PathVariable("studentId") Long studentId, @CurrentUser UserPrincipal currentUser, @PageableDefault(size = 10) Pageable pageable) {
+    return courseService.getStudentCourses(studentId, pageable);
+  }
+
+  @GetMapping("/teachers/{teacherId}/courses")
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_TEACHER', #teacherId, #currentUser)")
+  public Page<Course> getTeacherCourses(@PathVariable("teacherId") Long teacherId, @CurrentUser UserPrincipal currentUser, @PageableDefault(size = 10) Pageable pageable) {
+    return courseService.getTeacherCourses(teacherId, pageable);
+  }
+
   @GetMapping("/courses/{courseId}")
-  @PreAuthorize("hasRole('ADMIN')")
-  public Course getOne(@PathVariable("courseId") Long courseId) {
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.canAccessCourse(#courseId, #currentUser)")
+  public Course getOne(@PathVariable("courseId") Long courseId, @CurrentUser UserPrincipal currentUser) {
     return courseService.getOne(courseId);
   }
 
   @PostMapping("/courses")
-  @PreAuthorize("hasRole('ADMIN')")
-  // TODO: Admin i teacher za one na koje je engageovan i student za one koji su iz njegovog studijskog programa
-  public Course save(@Valid @RequestBody CourseRequest courseRequest) {
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.canUpdateCourse(#courseRequest, #currentUser)")
+  public Course save(@Valid @RequestBody CourseRequest courseRequest, @CurrentUser UserPrincipal currentUser) {
     Course course = modelMapper.map(courseRequest, Course.class);
 
     return courseService.save(course);

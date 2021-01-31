@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.education.model.User;
 import rs.ac.uns.ftn.education.model.Exam;
 import rs.ac.uns.ftn.education.model.Course;
 import rs.ac.uns.ftn.education.model.Student;
+import rs.ac.uns.ftn.education.payload.CourseRequest;
 import rs.ac.uns.ftn.education.payload.ExamRegistrationRequest;
 import rs.ac.uns.ftn.education.payload.ExamRequest;
 import rs.ac.uns.ftn.education.payload.GradeRequest;
@@ -34,6 +35,9 @@ public class SecurityService {
 
   @Autowired
   private ExamService examService;
+
+  @Autowired
+  private CourseService courseService;
 
   public boolean isRoleAccessingSelf(String role, Long modelId, UserPrincipal currentUser) {
     switch(role) {
@@ -113,6 +117,28 @@ public class SecurityService {
     return false;
   }
 
+  public boolean canAccessCourse(Long courseId, UserPrincipal currentUser){
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN))) {
+      return true;
+    }
+
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_TEACHER))) {
+      return engagementRepository.findByCourse_IdAndTeacher_Id(
+        courseId,
+        currentUser.getId()
+      ) != null;
+    }
+
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_STUDENT))) {
+      Student student = studentService.getOne(currentUser.getId());
+      Course course = courseService.getOne(courseId);
+
+      return course.isInStudyProgram(student.getStudyProgram());
+    } 
+
+    return false;
+  }
+
   public boolean canUpdateExam(ExamRequest examRequest, UserPrincipal currentUser) {
     if (!currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_TEACHER))) {
       return false;
@@ -124,6 +150,21 @@ public class SecurityService {
 
     return engagementRepository.findByCourse_IdAndTeacher_Id(
       examRequest.getCourse().getId(),
+      currentUser.getId()
+    ) != null;
+  }
+
+  public boolean canUpdateCourse(CourseRequest courseRequest, UserPrincipal currentUser) {
+    if (!currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_TEACHER))) {
+      return false;
+    }
+
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN))) {
+      return true;
+    }
+
+    return engagementRepository.findByCourse_IdAndTeacher_Id(
+      courseRequest.getId(),
       currentUser.getId()
     ) != null;
   }

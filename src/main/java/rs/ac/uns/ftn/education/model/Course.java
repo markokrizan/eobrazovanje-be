@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class Course {
     private Integer espbPoints;
 
     @OneToMany(mappedBy="course")
+    @JsonIgnore
     private Set<Engagement> engagements;
 
     @JsonIgnoreProperties("courses")
