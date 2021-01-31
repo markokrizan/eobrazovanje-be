@@ -34,4 +34,6 @@ public class UserRequest {
 
   @NotBlank
   private String personalIdNumber;
+
+  private String role;
 }
