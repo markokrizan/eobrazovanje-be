@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.education.model.Role;
 import rs.ac.uns.ftn.education.model.User;
 import rs.ac.uns.ftn.education.model.Exam;
+import rs.ac.uns.ftn.education.model.Course;
+import rs.ac.uns.ftn.education.model.Student;
 import rs.ac.uns.ftn.education.payload.ExamRegistrationRequest;
+import rs.ac.uns.ftn.education.payload.ExamRequest;
 import rs.ac.uns.ftn.education.payload.GradeRequest;
 import rs.ac.uns.ftn.education.payload.UserRequest;
 import rs.ac.uns.ftn.education.repository.EngagementRepository;
@@ -82,6 +85,45 @@ public class SecurityService {
 
     return engagementRepository.findByCourse_IdAndTeacher_Id(
       exam.getCourse().getId(),
+      currentUser.getId()
+    ) != null;
+  }
+
+  public boolean canAccessExam(Long examId, UserPrincipal currentUser){
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN))) {
+      return true;
+    }
+
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_TEACHER))) {
+      Exam exam = examService.getOne(examId);
+
+      return engagementRepository.findByCourse_IdAndTeacher_Id(
+        exam.getCourse().getId(),
+        currentUser.getId()
+      ) != null;
+    }
+
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_STUDENT))) {
+      Student student = studentService.getOne(currentUser.getId());
+      Course examCourse = examService.getOne(examId).getCourse();
+
+      return examCourse.isInStudyProgram(student.getStudyProgram());
+    } 
+
+    return false;
+  }
+
+  public boolean canUpdateExam(ExamRequest examRequest, UserPrincipal currentUser) {
+    if (!currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_TEACHER))) {
+      return false;
+    }
+
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN))) {
+      return true;
+    }
+
+    return engagementRepository.findByCourse_IdAndTeacher_Id(
+      examRequest.getCourse().getId(),
       currentUser.getId()
     ) != null;
   }

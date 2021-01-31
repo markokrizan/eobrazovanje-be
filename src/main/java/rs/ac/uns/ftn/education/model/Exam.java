@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -14,7 +15,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "exams")
+@Table(
+  name = "exams",
+  uniqueConstraints = @UniqueConstraint(columnNames={"term_id", "course_id"})
+)
 @Getter @Setter @NoArgsConstructor
 public class Exam extends BaseModel {
 

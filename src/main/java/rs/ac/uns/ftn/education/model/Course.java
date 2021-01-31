@@ -43,4 +43,8 @@ public class Course {
     @JsonIgnoreProperties("courses")
     @ManyToMany(mappedBy = "courses")
     private Set<StudyProgram> studyPrograms;
+
+    public boolean isInStudyProgram(StudyProgram studyProgram) {
+        return studyPrograms.contains(studyProgram);
+    }
 }

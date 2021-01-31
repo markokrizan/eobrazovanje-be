@@ -1,7 +1,5 @@
 package rs.ac.uns.ftn.education.controller;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.*;
 
 import rs.ac.uns.ftn.education.model.Exam;
@@ -55,14 +53,14 @@ public class ExamController {
   }
 
   @GetMapping("/exams/{examId}")
-  //TODO: Security: admin, teacher that has an engagement for that course, student that is in a study program that contains this course
-  public Exam getOne(@PathVariable("examId") Long examId) {
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.canAccessExam(#examId, #currentUser)")
+  public Exam getOne(@PathVariable("examId") Long examId, @CurrentUser UserPrincipal currentUser) {
     return examService.getOne(examId);
   }
 
   @PostMapping("/exams")
-  //TODO: Security: admin, teacher only when the exam is for a course that he has an engagement for
-  public Exam save(@Valid @RequestBody ExamRequest examRequest) {
+  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.canUpdateExam(#examRequest, #currentUser)")
+  public Exam save(@Valid @RequestBody ExamRequest examRequest, @CurrentUser UserPrincipal currentUser) {
     Exam exam = modelMapper.map(examRequest, Exam.class);
 
     return examService.save(exam);
