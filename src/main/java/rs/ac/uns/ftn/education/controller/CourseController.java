@@ -48,6 +48,7 @@ public class CourseController {
 
   @PostMapping("/courses")
   @PreAuthorize("hasRole('ADMIN')")
+  // TODO: Admin i teacher za one na koje je engageovan i student za one koji su iz njegovog studijskog programa
   public Course save(@Valid @RequestBody CourseRequest courseRequest) {
     Course course = modelMapper.map(courseRequest, Course.class);
 

@@ -28,6 +28,6 @@ public class Exam extends BaseModel {
 
     @OneToOne
     @JoinColumn(name="course_id", nullable=false)
-    @JsonIgnoreProperties("studyPrograms")
-    private Course course;
+    @JsonIgnoreProperties(value={"studyPrograms", "engagements"})
+    private Course course;    
 }

@@ -3,12 +3,14 @@ package rs.ac.uns.ftn.education.service;
 import java.util.List;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.education.model.Role;
 import rs.ac.uns.ftn.education.model.User;
+import rs.ac.uns.ftn.education.model.Exam;
 import rs.ac.uns.ftn.education.payload.ExamRegistrationRequest;
 import rs.ac.uns.ftn.education.payload.GradeRequest;
 import rs.ac.uns.ftn.education.payload.UserRequest;
@@ -26,6 +28,9 @@ public class SecurityService {
 
   @Autowired
   private EngagementRepository engagementRepository;
+
+  @Autowired
+  private ExamService examService;
 
   public boolean isRoleAccessingSelf(String role, Long modelId, UserPrincipal currentUser) {
     switch(role) {
@@ -73,16 +78,21 @@ public class SecurityService {
       return true;
     }
 
+    Exam exam = examService.getOne(gradeRequest.getExam().getId());
+
     return engagementRepository.findByCourse_IdAndTeacher_Id(
-      gradeRequest.getExamRegistration().getExam().getCourse().getId(),
+      exam.getCourse().getId(),
       currentUser.getId()
     ) != null;
   }
 
   private boolean currentUserHasRoles(UserPrincipal currentUser, List<String> roles) {
-    List<String> currentUserRoles = getCurrentUserRoles(currentUser);
+    HashSet<String> intersection = new HashSet<>(); 
 
-    return currentUserRoles.containsAll(roles);
+    intersection.addAll(getCurrentUserRoles(currentUser));
+    intersection.retainAll(roles);
+
+    return !intersection.isEmpty();
   }
 
   private List<String> getCurrentUserRoles(UserPrincipal currentUser) {
