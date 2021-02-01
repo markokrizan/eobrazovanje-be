@@ -56,4 +56,6 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     @Param("studyProgramId") Long studyProgramId,
     Pageable pageable
   );
+
+  Page<Exam> findByCourse_Engagements_Teacher_Id(Long teacherId, Pageable pageable);
 }

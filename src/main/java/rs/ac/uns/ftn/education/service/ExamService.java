@@ -68,6 +68,10 @@ public class ExamService {
     );
   }
 
+  public Page<Exam> getTeacherExams(Long studentId, Pageable pageable) {
+    return examRepository.findByCourse_Engagements_Teacher_Id(studentId, pageable);
+  }
+
   public Exam save(Exam exam) {
     Exam savedExam = examRepository.save(exam);
     examRepository.refresh(savedExam);

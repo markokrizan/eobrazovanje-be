@@ -32,6 +32,12 @@ public class ExamController {
     return examService.getAll(pageable);
   }
 
+  @GetMapping("/teachers/{teacherId}/exams")
+  @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+  public Page<Exam> getTeacherExams( @PathVariable("teacherId") Long teacherId, @PageableDefault(size = 10) Pageable pageable) {
+    return examService.getTeacherExams(teacherId, pageable);
+  }
+
   @GetMapping("/students/{studentId}/registrable-exams")
   @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
   public Page<Exam> getPossibleStudentExamRegistrationExams(
