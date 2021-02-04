@@ -81,7 +81,10 @@ public class StudentDocumentCreator implements DocumentCreator {
     DocumentCreatorHelper.addTable(document, gradeTableColumns, gradeTableColumnNames, gradeTableCells);
     DocumentCreatorHelper.addNewLine(document);
 
-    DocumentCreatorHelper.addText(document, "Average grade: " + student.getAverageGrade(), DocumentCreatorHelper.FONT_BOLD, true);
+    Double avgGrade = student.getAverageGrade();
+    String avgGradeRepresentation = avgGrade != null &&  !Double.isNaN(avgGrade) ? avgGrade.toString() : "/"; 
+
+    DocumentCreatorHelper.addText(document, "Average grade: " + avgGradeRepresentation, DocumentCreatorHelper.FONT_BOLD, true);
 
     DocumentCreatorHelper.addSeparator(document);
 
