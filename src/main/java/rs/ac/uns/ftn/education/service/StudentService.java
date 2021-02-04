@@ -7,6 +7,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Map;
+
+import javax.mail.MessagingException;
+
+import java.util.HashMap;
 import java.time.Year;
 import java.util.Collections;
 
@@ -15,12 +20,13 @@ import rs.ac.uns.ftn.education.repository.StudentRepository;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.Student;
 import rs.ac.uns.ftn.education.model.StudyProgram;
+import rs.ac.uns.ftn.education.payload.MailMessageDTO;
 import rs.ac.uns.ftn.education.payload.StudentRequest;
 import rs.ac.uns.ftn.education.model.Role;
 
 @Service
 public class StudentService {
-  
+
   @Autowired
   private StudentRepository studentRepository;
 
@@ -35,17 +41,20 @@ public class StudentService {
 
   @Autowired
   RoleRepository roleRepository;
-  
+
+  @Autowired
+  MailService mailService;
+
   public Page<Student> getAll(Pageable pageable) {
-      return studentRepository.findAll(pageable);
+    return studentRepository.findAll(pageable);
   }
 
-  public Student getOne(Long studentId) {    
-      return studentRepository.findById(studentId)
+  public Student getOne(Long studentId) {
+    return studentRepository.findById(studentId)
         .orElseThrow(() -> new ResourceNotFoundException("Student", "id", studentId));
   }
 
-  public Student save(StudentRequest studentRequest) {
+  public Student save(StudentRequest studentRequest) throws MessagingException {
       Student student = modelMapper.map(studentRequest, Student.class);
       student.setPassword(passwordEncoder.encode(studentRequest.getPersonalIdNumber()));
 
@@ -58,7 +67,21 @@ public class StudentService {
 
       savedStudent.setSchoolIdNumber(generateStudentIdNumber(savedStudent));
 
-      return studentRepository.saveAndFlush(savedStudent);
+      savedStudent = studentRepository.saveAndFlush(savedStudent);
+
+      MailMessageDTO mailMessageDTO = new MailMessageDTO();
+      mailMessageDTO.setFrom("admin@education.com");
+      mailMessageDTO.setTo(savedStudent.getEmail());
+      mailMessageDTO.setSubject("Your account has been created");
+      mailMessageDTO.setTemplateName("account-created");
+
+      Map<String, Object> parameters = new HashMap<>();
+      parameters.put("name", savedStudent.getFirstName());
+
+      mailMessageDTO.setParameters(parameters);
+      mailService.sendEmail(mailMessageDTO);
+
+      return savedStudent;
   }
 
   public Student enroll(Long studentId, Long studyProgramId) {

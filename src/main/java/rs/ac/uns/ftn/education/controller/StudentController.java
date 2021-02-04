@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @RestController
@@ -21,7 +23,7 @@ public class StudentController {
 
   @Autowired
   private StudentService studentService;
-  
+
   @GetMapping("/students")
   @PreAuthorize("hasRole('ADMIN')")
   public Page<Student> getAll(@PageableDefault(size = 10) Pageable pageable) {
@@ -29,14 +31,17 @@ public class StudentController {
   }
 
   @GetMapping("/students/{studentId}")
-  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
+  @PreAuthorize("hasRole('ADMIN')"
+      + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
   public Student getOne(@PathVariable("studentId") Long studentId, @CurrentUser UserPrincipal currentUser) {
     return studentService.getOne(studentId);
   }
 
   @PostMapping("/students")
-  @PreAuthorize("hasRole('ADMIN')" + " || @securityService.isRoleSavingSelf('ROLE_STUDENT', #studentRequest, #currentUser)")
-  public Student save(@Valid @RequestBody StudentRequest studentRequest, @CurrentUser UserPrincipal currentUser) {
+  @PreAuthorize("hasRole('ADMIN')"
+      + " || @securityService.isRoleSavingSelf('ROLE_STUDENT', #studentRequest, #currentUser)")
+  public Student save(@Valid @RequestBody StudentRequest studentRequest, @CurrentUser UserPrincipal currentUser)
+      throws MessagingException {
     return studentService.save(studentRequest);
   }
 

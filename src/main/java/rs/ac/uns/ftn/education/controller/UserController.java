@@ -8,10 +8,14 @@ import rs.ac.uns.ftn.education.payload.*;
 import rs.ac.uns.ftn.education.repository.RoleRepository;
 import rs.ac.uns.ftn.education.repository.UserRepository;
 import rs.ac.uns.ftn.education.security.UserPrincipal;
+import rs.ac.uns.ftn.education.service.MailService;
 import rs.ac.uns.ftn.education.security.CurrentUser;
 
 import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -39,11 +43,14 @@ public class UserController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    MailService mailService;
+
     @GetMapping("/users/me")
     @PreAuthorize("isAuthenticated()")
     public User getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         return userRepository.findById(currentUser.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUser.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUser.getId()));
     }
 
     @GetMapping("/users")
@@ -66,7 +73,7 @@ public class UserController {
 
     @PostMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public User save(@Valid @RequestBody UserRequest userRequest) {
+    public User save(@Valid @RequestBody UserRequest userRequest) throws MessagingException {
         User user = modelMapper.map(userRequest, User.class);
 
         user.setPassword(passwordEncoder.encode(user.getPersonalIdNumber()));
@@ -78,7 +85,21 @@ public class UserController {
             user.setRoles(Collections.singleton(userRole));
         }
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        MailMessageDTO mailMessageDTO = new MailMessageDTO();
+        mailMessageDTO.setFrom("admin@education.com");
+        mailMessageDTO.setTo(savedUser.getEmail());
+        mailMessageDTO.setSubject("Your account has been created");
+        mailMessageDTO.setTemplateName("account-created");
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("name", savedUser.getFirstName());
+
+        mailMessageDTO.setParameters(parameters);
+        mailService.sendEmail(mailMessageDTO);
+
+        return savedUser;
     }
 
     @DeleteMapping("/users/{userId}")
