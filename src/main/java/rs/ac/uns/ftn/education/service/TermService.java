@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.education.exception.AppException;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.Term;
 
@@ -30,6 +31,10 @@ public class TermService {
   }
 
   public Term save(Term term) {
+    if((term.getId() == null || term.getId() == 0) && termRepository.findByDateRange(term.getFrom(), term.getTo(), Pageable.unpaged()).hasContent()) {
+      throw new AppException("Term dates cannot overlap existing terms");
+    }
+
     return termRepository.save(term);
   }
 
