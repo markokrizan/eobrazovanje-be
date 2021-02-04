@@ -46,7 +46,7 @@ public class ExamRegistrationService {
       examRegistration.getStudent().getId()
     );
 
-    if (!existingRegistration.isEmpty()) {
+    if (!existingRegistration.isEmpty() && examRegistration.getId() == null) {
       throw new AppException(
         "Exam id " + examRegistration.getExam().getId() + " was already registred by student id " + examRegistration.getStudent().getId()
       );

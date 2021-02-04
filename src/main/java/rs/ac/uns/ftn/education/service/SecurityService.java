@@ -65,15 +65,24 @@ public class SecurityService {
   }
 
   public boolean canUpdateExamRegistration(ExamRegistrationRequest examRegistrationRequest, UserPrincipal currentUser) {
-    if (!currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN, Role.ROLE_STUDENT))) {
-      return false;
-    }
-
     if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_ADMIN))) {
       return true;
     }
 
-    return examRegistrationRequest.getStudent().getId() == currentUser.getId();
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_TEACHER))) {
+      Exam exam = examService.getOne(examRegistrationRequest.getExam().getId());
+
+      return engagementRepository.findByCourse_IdAndTeacher_Id(
+        exam.getCourse().getId(),
+        currentUser.getId()
+      ) != null;
+    }
+
+    if (currentUserHasRoles(currentUser, Arrays.asList(Role.ROLE_STUDENT))) {
+      return examRegistrationRequest.getStudent().getId() == currentUser.getId();
+    }
+
+    return false;
   }
 
   public boolean canUpdateGrade(GradeRequest gradeRequest, UserPrincipal currentUser) {
