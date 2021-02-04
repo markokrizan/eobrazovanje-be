@@ -87,17 +87,20 @@ public class UserController {
 
         User savedUser = userRepository.save(user);
 
-        MailMessageDTO mailMessageDTO = new MailMessageDTO();
-        mailMessageDTO.setFrom("admin@education.com");
-        mailMessageDTO.setTo(savedUser.getEmail());
-        mailMessageDTO.setSubject("Your account has been created");
-        mailMessageDTO.setTemplateName("account-created");
+        if (userRequest.getId() == null) {
+            MailMessageDTO mailMessageDTO = new MailMessageDTO();
+            mailMessageDTO.setFrom("admin@education.com");
+            mailMessageDTO.setTo(savedUser.getEmail());
+            mailMessageDTO.setSubject("Your account has been created");
+            mailMessageDTO.setTemplateName("account-created");
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", savedUser.getFirstName());
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("name", savedUser.getFirstName());
+            parameters.put("username", savedUser.getUsername());
 
-        mailMessageDTO.setParameters(parameters);
-        mailService.sendEmail(mailMessageDTO);
+            mailMessageDTO.setParameters(parameters);
+            mailService.sendEmail(mailMessageDTO);
+        }
 
         return savedUser;
     }
