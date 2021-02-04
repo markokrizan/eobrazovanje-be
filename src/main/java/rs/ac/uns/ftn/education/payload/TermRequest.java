@@ -11,6 +11,9 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
 public class TermRequest {
+
+  private Long id;
+
   @NotBlank
   private String name;
   
