@@ -14,6 +14,9 @@ import rs.ac.uns.ftn.education.model.Course;
 
 @Getter @Setter @NoArgsConstructor @ExamDate
 public class ExamRequest {
+
+  private Long id;
+
   @NotNull
   private Date examDate;
 
