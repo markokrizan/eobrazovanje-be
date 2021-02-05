@@ -22,8 +22,8 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
         "study_program_course.study_program_id = :studyProgramId AND " +
         "courses.year IN :studyYears AND " +
         "exams.term_id = :currentTermId AND " +
-        "(grades.student_id <> :studentId OR (grades.student_id = :studentId AND grades.grade_type = 0)) AND " +
-        "(exam_registrations.student_id <> :studentId) "
+        "(exam_registrations.student_id <> :studentId OR exam_registrations.student_id IS NULL) AND " +
+        "(grades.student_id IS NULL OR (grades.student_id = :studentId AND grades.grade_type = 0))"
       ,
       nativeQuery = true
   )
