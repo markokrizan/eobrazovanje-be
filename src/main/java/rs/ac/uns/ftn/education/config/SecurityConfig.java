@@ -35,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         "/v2/api-docs",
         "/webjars/**",
         "/api/auth/**",
-        "/api/user/checkUsernameAvailability"
+        "/api/user/checkUsernameAvailability",
+        "/health"
     };
 
     @Autowired
