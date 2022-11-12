@@ -20,7 +20,7 @@ jobs:
         run: |
           rm ./src/main/resources/application.properties
           mv ./src/main/resources/application-prod.properties ./src/main/resources/application.properties
-          ./mvnw package
+          ./mvnw package -DskipTests
   deploy:
     needs: build
     name: Deploy
