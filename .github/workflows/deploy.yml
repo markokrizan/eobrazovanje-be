@@ -20,13 +20,22 @@ jobs:
         run: |
           rm ./src/main/resources/application.properties
           mv ./src/main/resources/application-prod.properties ./src/main/resources/application.properties
-          ./mvnw package -DskipTests -DoutputDirectory=/education-0.0.1-SNAPSHOT.jar
+          ./mvnw package -DskipTests
+      - name: Upload JAR
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: target/education-0.0.1-SNAPSHOT.jar 
 
   deploy:
     needs: build
     name: Deploy
     runs-on: ubuntu-latest
     steps:
+      - name: Download JAR
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v13
         with:
@@ -37,4 +46,4 @@ jobs:
           environment_name: edu-eb-environment
           version_label: ${{github.SHA}}
           region: ${{ secrets.AWS_REGION }}
-          deployment_package: /education-0.0.1-SNAPSHOT.jar
+          deployment_package: education-0.0.1-SNAPSHOT.jar
