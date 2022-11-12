@@ -1,0 +1,39 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: Build with Maven
+        uses: actions/checkout@v1
+        script: |
+          rm ./src/main/resources/application.properties
+          mv ./src/main/resources/application-prod.properties ./src/main/resources/application.properties
+          ./mvnw package
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v13
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          use_existing_version_if_available: false
+          application_name: autocluck
+          environment_name: Autocluck-env
+          version_label: ${{github.SHA}}
+          region: ${{ secrets.AWS_REGION }}
+          deployment_package: ./target/education-0.0.1-SNAPSHOT.jar

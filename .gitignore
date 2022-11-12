@@ -36,8 +36,6 @@ nbdist/
 !.elasticbeanstalk/*.global.yml
 .ebextensions
 
-src/main/resources/application-prod.properties
-
 /images/*
 /documents/*
 
