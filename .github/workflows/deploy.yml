@@ -11,13 +11,13 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: '11'
       - name: Build with Maven
-        uses: actions/checkout@v1
-        script: |
+        run: |
           rm ./src/main/resources/application.properties
           mv ./src/main/resources/application-prod.properties ./src/main/resources/application.properties
           ./mvnw package
