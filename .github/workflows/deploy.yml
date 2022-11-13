@@ -17,17 +17,18 @@ jobs:
         with:
           java-version: '11'
       - name: Build with Maven
+        env:
+          RDS_HOSTNAME: ${{ secrets.RDS_HOSTNAME }}
+          RDS_PORT: ${{ secrets.RDS_PORT }}
+          RDS_DB_NAME: ${{ secrets.RDS_DB_NAME }}
+          RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
+          RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_TTL: ${{ secrets.JWT_TTL }}
         run: |
           rm ./src/main/resources/application.properties
           mv ./src/main/resources/application-prod.properties ./src/main/resources/application.properties
-          env RDS_HOSTNAME=${{ secrets.RDS_HOSTNAME }} \ 
-            RDS_PORT=${{ secrets.RDS_HOSTNAME }} \ 
-            RDS_DB_NAME=${{ secrets.RDS_HOSTNAME }}  \
-            RDS_USERNAME=${{ secrets.RDS_HOSTNAME }} \
-            RDS_PASSWORD=${{ secrets.RDS_HOSTNAME }} \
-            JWT_SECRET=${{ secrets.RDS_HOSTNAME }} \
-            JWT_TTL=${{ secrets.RDS_HOSTNAME }} \
-            java -jar education-0.0.1-SNAPSHOT.jar ./mvnw package -DskipTests
+          java -jar education-0.0.1-SNAPSHOT.jar ./mvnw package -DskipTests
           cp target/education-0.0.1-SNAPSHOT.jar . && zip -r application.zip .ebextensions/ education-0.0.1-SNAPSHOT.jar
       - name: Upload application version
         uses: actions/upload-artifact@v2
