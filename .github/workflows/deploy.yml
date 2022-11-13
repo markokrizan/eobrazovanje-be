@@ -28,7 +28,7 @@ jobs:
         run: |
           rm ./src/main/resources/application.properties
           mv ./src/main/resources/application-prod.properties ./src/main/resources/application.properties
-          java -jar education-0.0.1-SNAPSHOT.jar ./mvnw package -DskipTests
+          ./mvnw package -DskipTests
           cp target/education-0.0.1-SNAPSHOT.jar . && zip -r application.zip .ebextensions/ education-0.0.1-SNAPSHOT.jar
       - name: Upload application version
         uses: actions/upload-artifact@v2
