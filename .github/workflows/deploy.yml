@@ -29,12 +29,11 @@ jobs:
           rm ./src/main/resources/application.properties
           mv ./src/main/resources/application-prod.properties ./src/main/resources/application.properties
           ./mvnw package -DskipTests
-          cp target/education-0.0.1-SNAPSHOT.jar . && zip -r application.zip .ebextensions/ education-0.0.1-SNAPSHOT.jar
       - name: Upload application version
         uses: actions/upload-artifact@v2
         with:
           name: artifact
-          path: application.zip 
+          path: ./target/education-0.0.1-SNAPSHOT.jar 
 
   deploy:
     needs: build
@@ -55,4 +54,4 @@ jobs:
           environment_name: edu-eb-environment
           version_label: ${{github.SHA}}
           region: ${{ secrets.AWS_REGION }}
-          deployment_package: application.zip
+          deployment_package: education-0.0.1-SNAPSHOT.jar
