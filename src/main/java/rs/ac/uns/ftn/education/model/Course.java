@@ -39,7 +39,6 @@ public class Course {
     private Integer espbPoints;
 
     @OneToMany(mappedBy="course")
-    @JsonIgnore
     private Set<Engagement> engagements;
 
     @JsonIgnoreProperties("courses")
