@@ -43,7 +43,7 @@ public class GradeService {
     ExamRegistration gradeExamRegistration = examRegistrationService.getOne(
       grade.getExamRegistration().getId()
     );
-    gradeExamRegistration.setExamRegistrationStatus(ExamRegistrationStatus.PASSED);
+    gradeExamRegistration.setExamRegistrationStatus(grade.gradeType == GradeType.FIVE ? ExamRegistrationStatus.FAILED : ExamRegistrationStatus.PASSED);
     examRegistrationService.save(gradeExamRegistration);
 
     return savedGrade;
