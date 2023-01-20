@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.ExamRegistration;
 import rs.ac.uns.ftn.education.model.ExamRegistrationStatus;
 import rs.ac.uns.ftn.education.model.Grade;
+import rs.ac.uns.ftn.education.model.GradeType;
 import rs.ac.uns.ftn.education.repository.GradeRepository;
 
 @Service
