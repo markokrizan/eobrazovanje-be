@@ -10,6 +10,7 @@ import lombok.Setter;
 import rs.ac.uns.ftn.education.model.Semester;
 import rs.ac.uns.ftn.education.model.Year;
 import rs.ac.uns.ftn.education.model.Engagement;
+import rs.ac.uns.ftn.education.model.StudyProgram;
 
 @Getter @Setter @NoArgsConstructor
 public class CourseRequest {
@@ -29,4 +30,6 @@ public class CourseRequest {
   private Integer espbPoints;
 
   private Set<Engagement> engagements;
+
+  private Set<StudyProgram> studyPrograms;
 }
