@@ -42,7 +42,7 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
       "JOIN courses ON exams.course_id = courses.id " +
       "JOIN study_program_course ON study_program_course.course_id = courses.id " +
       "JOIN study_programs ON study_program_course.study_program_id = study_programs.id " +
-      "JOIN grades ON grades.student_id = :studentId " +
+      "JOIN grades ON grades.student_id = :studentId AND grades.exam_id = exams.id " +
       "WHERE " + 
         "study_program_course.study_program_id = :studyProgramId AND " +
         "grades.grade_type > 0"
