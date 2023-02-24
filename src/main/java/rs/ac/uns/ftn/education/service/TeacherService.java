@@ -61,18 +61,18 @@ public class TeacherService {
       Teacher savedTeacher = teacherRepository.save(teacher);
 
       if (teacherRequest.getId() == null) {
-        MailMessageDTO mailMessageDTO = new MailMessageDTO();
-        mailMessageDTO.setFrom("admin@education.com");
-        mailMessageDTO.setTo(savedTeacher.getEmail());
-        mailMessageDTO.setSubject("Your account has been created");
-        mailMessageDTO.setTemplateName("account-created");
+        // MailMessageDTO mailMessageDTO = new MailMessageDTO();
+        // mailMessageDTO.setFrom("admin@education.com");
+        // mailMessageDTO.setTo(savedTeacher.getEmail());
+        // mailMessageDTO.setSubject("Your account has been created");
+        // mailMessageDTO.setTemplateName("account-created");
   
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", savedTeacher.getFirstName());
-        parameters.put("username", savedTeacher.getUsername());
+        // Map<String, Object> parameters = new HashMap<>();
+        // parameters.put("name", savedTeacher.getFirstName());
+        // parameters.put("username", savedTeacher.getUsername());
   
-        mailMessageDTO.setParameters(parameters);
-        mailService.sendEmail(mailMessageDTO);
+        // mailMessageDTO.setParameters(parameters);
+        // mailService.sendEmail(mailMessageDTO);
       }
 
       return savedTeacher;
