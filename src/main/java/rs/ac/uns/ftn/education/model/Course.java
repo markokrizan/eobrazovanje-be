@@ -43,7 +43,7 @@ public class Course {
     private Set<Engagement> engagements;
 
     @JsonIgnoreProperties("courses")
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "courses", cascade = CascadeType.ALL)
     private Set<StudyProgram> studyPrograms;
 
     public boolean isInStudyProgram(StudyProgram studyProgram) {
