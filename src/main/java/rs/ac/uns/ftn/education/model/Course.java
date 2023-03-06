@@ -39,7 +39,7 @@ public class Course {
 
     private Integer espbPoints;
 
-    @OneToMany(mappedBy="course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Engagement> engagements;
 
     @JsonIgnoreProperties("courses")
