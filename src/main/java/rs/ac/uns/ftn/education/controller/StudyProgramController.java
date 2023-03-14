@@ -46,7 +46,7 @@ public class StudyProgramController {
 
   @PutMapping("/study-programs/{studyProgramId}/add-course/{courseId}")
   @PreAuthorize("hasRole('ADMIN')")
-  public StudyProgram save(@PathVariable("studyProgramId") Long studyProgramId, @PathVariable("studyProgramId") Long courseId) {
+  public StudyProgram save(@PathVariable("studyProgramId") Long studyProgramId, @PathVariable("courseId") Long courseId) {
       return studyProgramService.addCourse(studyProgramId, courseId);
   }
 
