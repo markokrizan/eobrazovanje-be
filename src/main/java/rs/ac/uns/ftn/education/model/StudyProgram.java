@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.education.model;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -10,8 +12,10 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="study_programs", uniqueConstraints=@UniqueConstraint(columnNames={"name"}))
-@Getter @Setter @NoArgsConstructor
+@Table(name = "study_programs", uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))
+@Getter
+@Setter
+@NoArgsConstructor
 public class StudyProgram {
 
   @Id
@@ -22,7 +26,7 @@ public class StudyProgram {
 
   private String prefix;
 
-  private String name; 
+  private String name;
 
   private Integer espbPoints;
 
@@ -30,9 +34,21 @@ public class StudyProgram {
 
   @JsonIgnoreProperties("studyPrograms")
   @ManyToMany
-  @JoinTable(
-    name = "study_program_course", 
-    joinColumns = @JoinColumn(name = "study_program_id"), 
-    inverseJoinColumns = @JoinColumn(name = "course_id"))
-  private Set<Course> courses;
+  @JoinTable(name = "study_program_course", joinColumns = @JoinColumn(name = "study_program_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+  private Set<Course> courses = new HashSet<>();
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other)
+      return true;
+    if (other == null || getClass() != other.getClass())
+      return false;
+    StudyProgram that = (StudyProgram) other;
+    return Objects.equals(id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return id.hashCode();
+  }
 }

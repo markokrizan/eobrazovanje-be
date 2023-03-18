@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.Course;
 import rs.ac.uns.ftn.education.model.Student;
+import rs.ac.uns.ftn.education.model.StudyProgram;
 
 @Service
 public class CourseService {
@@ -19,7 +20,10 @@ public class CourseService {
 
   @Autowired
   private StudentService studentService;
-  
+
+  @Autowired
+  private StudyProgramService studyProgramService;
+
   public Page<Course> getAll(Pageable pageable) {
     return courseRepository.findAll(pageable);
   }
@@ -38,12 +42,34 @@ public class CourseService {
     return courseRepository.findByEngagements_Teacher_Id(teacherId, pageable);
   }
 
-  public Course getOne(Long courseId) {    
+  public Course getOne(Long courseId) {
     return courseRepository.findById(courseId)
-      .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
+        .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
   }
 
   public Course save(Course course) {
+    // Add to provided study programs
+    course.getStudyPrograms()
+        .stream()
+        .map(studyProgram -> {
+          StudyProgram savedProgram = studyProgramService.getOne(studyProgram.getId());
+          savedProgram.getCourses().add(course);
+          return savedProgram;
+        }).forEach(studyProgram -> {
+          studyProgramService.save(studyProgram);
+        });
+
+    // Remove from others
+    studyProgramService.getAll(Pageable.unpaged())
+        .get()
+        .filter(studyProgram -> course.getStudyPrograms().contains(studyProgram) == false)
+        .forEach(studyProgram -> {
+          System.out.println(studyProgram.getCourses());
+          studyProgram.getCourses().remove(course);
+          System.out.println(studyProgram.getCourses());
+          studyProgramService.save(studyProgram);
+        });
+
     return courseRepository.save(course);
   }
 
