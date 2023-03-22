@@ -73,6 +73,10 @@ public class ExamService {
   }
 
   public Exam save(Exam exam) {
+    if(examRepository.findByCourse_IdAndTerm_Id(exam.getCourse().getId(), exam.getTerm().getId()) != null) {
+      throw new AppException("Exam for this course already exists in this term");
+    }
+
     Exam savedExam = examRepository.save(exam);
     examRepository.refresh(savedExam);
 
