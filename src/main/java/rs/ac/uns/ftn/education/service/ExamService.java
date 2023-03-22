@@ -38,16 +38,17 @@ public class ExamService {
   }
 
   public Page<Exam> getPossibleStudentExamRegistrationExams(Long studentId, Pageable pageable) {
+    Term currentTerm = termService.getCurrentTerm();
+
+    if (currentTerm == null) {
+      return Page.empty();
+    }
+
     Student student = studentService.getOne(studentId);
     List<Integer> currentAndPreviousYears = student.getCurrentAndPreviousStudyYears()
       .stream()
       .map(year -> year.ordinal())
       .collect(Collectors.toList());
-    Term currentTerm = termService.getCurrentTerm();
-
-    if (currentTerm == null) {
-      throw new AppException("There is no active term, check from and to dates of terms you have currently set up!");
-    }
 
     return examRepository.getPossibleStudentExamRegistrationExams(
       studentId, 
