@@ -1,7 +1,9 @@
 package rs.ac.uns.ftn.education.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import rs.ac.uns.ftn.education.model.Document;
 import rs.ac.uns.ftn.education.model.Student;
 import rs.ac.uns.ftn.education.payload.StudentRequest;
 import rs.ac.uns.ftn.education.security.CurrentUser;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -49,6 +53,27 @@ public class StudentController {
   @PreAuthorize("hasRole('ADMIN')")
   public Student enroll(@PathVariable("studentId") Long studentId, @PathVariable("studyProgramId") Long studyProgramId) {
     return studentService.enroll(studentId, studyProgramId);
+  }
+
+  @GetMapping("/students/{studentId}/documents")
+  @PreAuthorize("hasRole('ADMIN')"
+      + " || @securityService.isRoleAccessingSelf('ROLE_STUDENT', #studentId, #currentUser)")
+  public List<Document> getDocuments(@PathVariable("studentId") Long studentId, @CurrentUser UserPrincipal currentUser) {
+    return studentService.getDocuments(studentId);
+  }
+
+  @PostMapping("/students/{studentId}/upload-document")
+  @PreAuthorize("hasRole('ADMIN')"
+      + " || @securityService.isRoleSavingSelf('ROLE_STUDENT', #studentId, #currentUser)")
+  public Document uploadDocument(@PathVariable("studentId") Long studentId, @RequestParam("document") MultipartFile document) throws Exception {
+    return studentService.uploadDocument(studentId, document);
+  }
+
+  @DeleteMapping("/students/{studentId}/delete-document/{documentName}")
+  @PreAuthorize("hasRole('ADMIN')"
+      + " || @securityService.isRoleSavingSelf('ROLE_STUDENT', #studentId, #currentUser)")
+  public void deleteDocument(@PathVariable("studentId") Long studentId, @PathVariable("documentName") String documentName) throws Exception {
+    studentService.deleteDocument(studentId, documentName);
   }
 
   @DeleteMapping("/students/{studentId}")

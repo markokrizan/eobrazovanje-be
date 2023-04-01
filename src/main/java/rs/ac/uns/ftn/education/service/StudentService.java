@@ -3,25 +3,30 @@ package rs.ac.uns.ftn.education.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Map;
+// import java.util.Map;
 
 import javax.mail.MessagingException;
 
-import java.util.HashMap;
+// import java.util.HashMap;
 import java.time.Year;
 import java.util.Collections;
+import java.util.List;
 
+import rs.ac.uns.ftn.education.repository.DocumentRepository;
 import rs.ac.uns.ftn.education.repository.RoleRepository;
 import rs.ac.uns.ftn.education.repository.StudentRepository;
+import rs.ac.uns.ftn.education.service.file.S3FileService;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.Student;
 import rs.ac.uns.ftn.education.model.StudyProgram;
-import rs.ac.uns.ftn.education.payload.MailMessageDTO;
+// import rs.ac.uns.ftn.education.payload.MailMessageDTO;
 import rs.ac.uns.ftn.education.payload.StudentRequest;
+import rs.ac.uns.ftn.education.model.Document;
 import rs.ac.uns.ftn.education.model.Role;
 
 @Service
@@ -44,6 +49,12 @@ public class StudentService {
 
   @Autowired
   MailService mailService;
+
+  @Autowired
+  DocumentRepository documentRepository;
+
+  @Autowired
+  S3FileService fileService;
 
   public Page<Student> getAll(Pageable pageable) {
     return studentRepository.findAll(pageable);
@@ -113,5 +124,49 @@ public class StudentService {
       Long.toString(student.getId()),
       Year.now().toString()
     );
+  }
+
+  public List<Document> getDocuments(Long studentId) {
+    return documentRepository.findByStudent_Id(studentId);
+  } 
+
+  public Document uploadDocument(Long studentId, MultipartFile document) throws Exception {
+    Student student = getOne(studentId);
+    Document studentDocument = documentRepository.findByStudent_IdAndName(student.getId(), document.getOriginalFilename())
+      .orElse(new Document());
+
+    String path = String.format(
+      "edu-app-student-documents/%s/%s",
+      student.getId().toString(),
+      document.getOriginalFilename()
+    );
+
+    fileService.uploadFile(
+      document,
+      path
+    );
+
+    studentDocument.setStudent(student);
+    studentDocument.setFilePath(path);
+    studentDocument.setName(document.getOriginalFilename());
+
+    documentRepository.save(studentDocument);
+
+    return studentDocument;
+  }
+
+  public void deleteDocument(Long studentId, String documentName) throws Exception {
+    Student student = getOne(studentId);
+    Document document = documentRepository.findByStudent_IdAndName(student.getId(), documentName)
+      .orElseThrow(() -> new ResourceNotFoundException("Document", "name", documentName));
+
+    String path = String.format(
+      "edu-app-student-documents/%s/%s",
+      student.getId().toString(),
+      documentName
+    );
+
+    fileService.removeFile(path);
+    documentRepository.delete(document);
   }
 }
