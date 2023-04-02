@@ -7,6 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 
 // import java.util.Map;
 
@@ -153,6 +155,20 @@ public class StudentService {
     documentRepository.save(studentDocument);
 
     return studentDocument;
+  }
+
+  public ResponseEntity<byte[]> downloadDocument(Long documentId) throws Exception {
+    Document document = documentRepository.getOne(documentId);
+
+    byte[] documentFile = fileService.getFile(document.getFilePath());
+
+    var headers = new HttpHeaders();
+    headers.add("Content-Disposition", "inline; filename=" + document.getName());
+
+    return ResponseEntity
+      .ok()
+      .headers(headers)
+      .body(documentFile);
   }
 
   public void deleteDocument(Long studentId, String documentName) throws Exception {
