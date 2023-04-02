@@ -60,5 +60,5 @@ public class Student extends User {
 
     @OneToMany(mappedBy="student")
     @JsonIgnoreProperties("student")
-    private Set<Grade> documents;
+    private Set<Document> documents;
 }
