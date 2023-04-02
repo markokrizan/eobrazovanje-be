@@ -57,4 +57,8 @@ public class Student extends User {
             .mapToInt(grade -> grade.getGradeValue())
             .sum() / grades.size();
     }
+
+    @OneToMany(mappedBy="student")
+    @JsonIgnoreProperties("student")
+    private Set<Grade> documents;
 }
