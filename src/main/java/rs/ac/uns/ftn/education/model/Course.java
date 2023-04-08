@@ -65,6 +65,10 @@ public class Course {
 
     @Override
     public int hashCode() {
+        if (id == null) {
+            return super.hashCode();
+        }
+
         return id.hashCode();
     }
 }

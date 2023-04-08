@@ -3,14 +3,18 @@ package rs.ac.uns.ftn.education.service;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.education.repository.CourseRepository;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import rs.ac.uns.ftn.education.exception.AppException;
 import rs.ac.uns.ftn.education.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.education.model.Course;
 import rs.ac.uns.ftn.education.model.Student;
 import rs.ac.uns.ftn.education.model.StudyProgram;
+import rs.ac.uns.ftn.education.model.Engagement;
 
 @Service
 public class CourseService {
@@ -48,6 +52,58 @@ public class CourseService {
   }
 
   public Course save(Course course) {
+    if (course.getId() != null) {
+      return updateCourse(course);
+    }
+
+    return createCourse(course);
+  }
+
+  private Course createCourse(Course course) {
+    if (courseRepository.findByName(course.getName()) != null) {
+      throw new AppException("Course name already exists");
+    }
+
+    Course courseToSave = new Course();
+    courseToSave.setName(course.getName());
+    courseToSave.setYear(course.getYear());
+    courseToSave.setSemester(course.getSemester());
+    courseToSave.setEspbPoints(course.getEspbPoints());
+
+    Course savedCourse = courseRepository.save(courseToSave);
+
+    Set<Engagement> engagements = course.getEngagements()
+      .stream()
+      .map(engagement -> {
+        engagement.setCourse(savedCourse);
+        return engagement;
+      })
+      .collect(Collectors.toSet());
+
+    savedCourse.setEngagements(engagements);
+
+    course.getStudyPrograms()
+      .stream()
+      .map(studyProgram -> {
+        StudyProgram savedProgram = studyProgramService.getOne(studyProgram.getId());
+        savedProgram.getCourses().add(savedCourse);
+        return savedProgram;
+      }).forEach(studyProgram -> {
+        studyProgramService.save(studyProgram);
+      });
+
+    courseRepository.save(savedCourse);
+    courseRepository.refresh(savedCourse);
+    return savedCourse;
+  }
+
+  private Course updateCourse(Course course) {
+    Course existingCourse = courseRepository.findByName(course.getName());
+
+    if (existingCourse != null && existingCourse.getId() != course.getId()) {
+      throw new AppException("Course name already exists");
+    }
+
     // Add to provided study programs
     course.getStudyPrograms()
         .stream()
@@ -64,9 +120,7 @@ public class CourseService {
         .get()
         .filter(studyProgram -> course.getStudyPrograms().contains(studyProgram) == false)
         .forEach(studyProgram -> {
-          System.out.println(studyProgram.getCourses());
           studyProgram.getCourses().remove(course);
-          System.out.println(studyProgram.getCourses());
           studyProgramService.save(studyProgram);
         });
 
