@@ -23,7 +23,9 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
         "courses.year IN :studyYears AND " +
         "exams.term_id = :currentTermId AND " +
         "(exam_registrations.student_id <> :studentId OR exam_registrations.student_id IS NULL) AND " +
-        "(grades.student_id IS NULL OR (grades.student_id = :studentId AND grades.grade_type = 0))"
+        "(grades.student_id IS NULL OR (grades.student_id = :studentId AND grades.grade_type = 0))" +
+        // No grades recieved for the exams course in any term ever
+        "AND NOT EXISTS(SELECT * FROM grades JOIN exams AS grade_exams ON grades.exam_id = grade_exams.id WHERE student_id = :studentId AND grade_exams.course_id = courses.id)"
       ,
       nativeQuery = true
   )
